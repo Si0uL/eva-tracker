@@ -16,6 +16,10 @@ angular.module('tracker.services', [])
     return {
         readAndParse: function(str) {
 
+            if (str === undefined) {
+                console.log('Problem loading your tree: str is undefined');
+            };
+
             var tree = {
                 name: 'root',
                 next: [],

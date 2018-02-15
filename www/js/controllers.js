@@ -1,6 +1,6 @@
 angular.module('tracker.controller', ['ionic'])
 
-.controller('HomeCtrl', function($scope, parserService, $cordovaNativeAudio, $timeout) {
+.controller('HomeCtrl', function($scope, parserService, $cordovaNativeAudio, $cordovaFile, $timeout) {
 
     // parameters
     $scope.actionDelay = 5000;
@@ -9,30 +9,6 @@ angular.module('tracker.controller', ['ionic'])
     $scope.action = undefined;
     $scope.loop = undefined;
     $scope.loopLength = undefined;
-
-    // Initialisation of variables;
-    var _str = `
-    *eva-status
-        **beginning
-        **end
-
-    *displacement
-        **departure
-        **arrival
-
-    *engineering-check
-        **beginning
-        **end
-        **water-tank
-            ***beginning
-            ***end
-
-    *sismometer
-        **beginning
-        **end
-    `;
-
-    $scope.actionTree = parserService.readAndParse(_str);
 
     $scope.initTree = function() {
         $scope.currentTreeIndices = [];
@@ -113,5 +89,17 @@ angular.module('tracker.controller', ['ionic'])
     /***
     MAIN
     ***/
-    $scope.initTree();
+    setTimeout(function() {
+        // Initialisation of variables;
+        $cordovaFile.readAsText(cordova.file.externalRootDirectory, "tree.config")
+        .then(function (_str) {
+            // success
+            $scope.actionTree = parserService.readAndParse(_str);
+            $scope.initTree();
+        }, function (error) {
+            // error
+            console.log('Problem Loading Tree: \n', error);
+        });
+
+    }, 1000);
 });
