@@ -30,7 +30,7 @@ angular.module('tracker.controller', ['ionic'])
     $scope.nextState = function() {
         var new_idx = $scope.currentTreeIndices.pop() + 1;
         if (new_idx === $scope.loopLength) {
-            $scope.sound('aborting_sound');
+            $scope.sound('abortion-sound');
             $scope.initTree();
         } else {
             $scope.currentTreeIndices.push(new_idx);
@@ -47,10 +47,10 @@ angular.module('tracker.controller', ['ionic'])
         if ($scope.currentTreeElement.next.length === 0) {
             console.log('You chose');
             console.log($scope.action + ' | ' + $scope.currentTreeElement.name);
-            $scope.sound('validation_double_beep');
+            $scope.sound('validation-double-beep');
             $scope.initTree();
         } else {
-            $scope.sound('validation_beep');
+            $scope.sound('validation-beep');
             $scope.action += (' | ' + $scope.currentTreeElement.name);
             $scope.currentTreeIndices.push(0);
             $scope.loopLength = $scope.currentTreeElement.next.length;
@@ -62,21 +62,11 @@ angular.module('tracker.controller', ['ionic'])
         };
     };
 
-    // Sound system
-    setTimeout(function(){
-        $cordovaNativeAudio.preloadSimple('click', 'audio/pieces-1.mp3').then(function (msg) {
-            console.log(msg);
-            }, function (error) {
-                alert(error);
-            });
-    }, 2000);
-
     $scope.sound = function (songname) {
         console.log('*** ~~~~ Song Playing ~~~~ ***');
         console.log(songname);
-        /*
         $cordovaNativeAudio.play(songname);
-
+        /*
         // to remove ?
         // stop 'music' loop and unload
         $timeout(function () {
@@ -94,7 +84,19 @@ angular.module('tracker.controller', ['ionic'])
         $cordovaFile.readAsText(cordova.file.externalRootDirectory, "tree.config")
         .then(function (_str) {
             // success
-            $scope.actionTree = parserService.readAndParse(_str);
+            var _aux = parserService.readAndParse(_str);
+            console.log(_aux);
+            $scope.actionTree = _aux[0];
+            var to_load = _aux[1];
+            for (var i = 0; i < to_load.length; i++) {
+                $cordovaNativeAudio
+                .preloadSimple(to_load[i], 'audio/' + to_load[i] + '.mp3')
+                .then(function (msg) {
+                    console.log(msg);
+                }, function (error) {
+                    alert("Problem loading " + to_load[i] + " voice:\n" + error);
+                });
+            };
             $scope.initTree();
         }, function (error) {
             // error

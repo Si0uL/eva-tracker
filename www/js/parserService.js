@@ -24,6 +24,7 @@ angular.module('tracker.services', [])
                 name: 'root',
                 next: [],
             };
+            var to_load = ['validation-beep', 'validation-double-beep', 'abortion-sound'];
             var indices = [];
             var currentDepth = 0;
             var currentWord = '';
@@ -57,6 +58,7 @@ angular.module('tracker.services', [])
                                 next: [],
                             };
                             putElement(indices, tree, newElement);
+                            if (!to_load.includes(currentWord)) to_load.push(currentWord);
                             currentWord = '';
                             currentDepth = 0;
                         };
@@ -68,7 +70,9 @@ angular.module('tracker.services', [])
                 };
                 idx ++;
             };
-            return tree;
+            console.log(tree);
+            console.log(to_load);
+            return [tree, to_load];
         }
     };
 });
