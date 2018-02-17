@@ -9,6 +9,8 @@ angular.module('tracker.controller', ['ionic'])
     $scope.action = undefined;
     $scope.loop = undefined;
     $scope.loopLength = undefined;
+    $scope.output = "";
+    var filename = "eva-logs/EVA_log_" + new Date().toString().slice(0,24) + ".txt";
 
     $scope.initTree = function() {
         $scope.currentTreeIndices = [];
@@ -42,9 +44,24 @@ angular.module('tracker.controller', ['ionic'])
         };
     };
 
+    $scope.addEntry = function(title) {
+        $scope.output += (new Date().toString().slice(0,24) + " - " + title + "\n");
+        console.log(filename);
+        $cordovaFile.writeFile(cordova.file.externalRootDirectory, filename, $scope.output, true)
+        .then(function (success) {
+            // success
+            console.log(success);
+        }, function (error) {
+            // error
+            console.log(error);
+            alert("Error saving journal file !");
+        });
+    };
+
     $scope.click = function() {
         clearTimeout($scope.loop);
         if ($scope.currentTreeElement.next.length === 0) {
+            $scope.addEntry($scope.currentTreeElement.name);
             console.log('You chose');
             console.log($scope.action + ' | ' + $scope.currentTreeElement.name);
             $scope.sound('validation-double-beep');
