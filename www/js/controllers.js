@@ -3,14 +3,17 @@ angular.module('tracker.controller', ['ionic'])
 .controller('HomeCtrl', function($scope, parserService, $cordovaNativeAudio, $cordovaFile, $timeout) {
 
     // parameters
-    $scope.actionDelay = 5000;
+    $scope.actionDelay = 3000;
     $scope.currentTreeElement = undefined;
     $scope.currentTreeIndices = undefined;
     $scope.action = undefined;
     $scope.loop = undefined;
     $scope.loopLength = undefined;
     $scope.output = "";
-    var filename = "eva-logs/EVA_log_" + new Date().toString().slice(0,24) + ".txt";
+    var _d = new Date();
+    // TODO: fake timeZone offset, to be improved !
+    var filename = "eva-logs/EVA_log_" + _d.getFullYear() + "_" + (_d.getMonth() + 1)  + "_" +
+    _d.getDate() + "_" + (_d.getHours() - 8) + "_" + _d.getMinutes() + ".txt";
 
     $scope.initTree = function() {
         $scope.currentTreeIndices = [];
@@ -94,7 +97,7 @@ angular.module('tracker.controller', ['ionic'])
 
 
     /***
-    MAIN
+    MAIN (ran after one second)
     ***/
     setTimeout(function() {
         // Initialisation of variables;
