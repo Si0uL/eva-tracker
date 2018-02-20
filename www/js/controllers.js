@@ -118,6 +118,13 @@ angular.module('tracker.controller', ['ionic'])
                 });
             };
             $scope.initTree();
+            // Keeping awake with insomnia
+            window.plugins.insomnia.keepAwake(function(data){
+                console.log(data);
+            },
+            function(err) {
+                console.log(err);
+            });
         }, function (error) {
             // error
             console.log('Problem Loading Tree: \n', error);
