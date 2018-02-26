@@ -10,10 +10,7 @@ angular.module('tracker.controller', ['ionic'])
     $scope.loop = undefined;
     $scope.loopLength = undefined;
     $scope.output = "";
-    var _d = new Date();
-    // TODO: fake timeZone offset, to be improved !
-    var filename = "eva-logs/EVA_log_" + _d.getFullYear() + "_" + (_d.getMonth() + 1)  + "_" +
-    _d.getDate() + "_" + (_d.getHours() - 8) + "_" + _d.getMinutes() + ".txt";
+    var filename = "eva-logs/EVA_log_" + moment.tz("America/Phoenix").format('YYYYMMDD-HHmm') + ".txt";
 
     $scope.initTree = function() {
         $scope.currentTreeIndices = [];
@@ -48,8 +45,7 @@ angular.module('tracker.controller', ['ionic'])
     };
 
     $scope.addEntry = function(title) {
-        $scope.output += (new Date().toString().slice(0,24) + " - " + title + "\n");
-        console.log(filename);
+        $scope.output += (moment.tz("America/Phoenix").format().substring(0,19) + " - " + title + "\n");
         $cordovaFile.writeFile(cordova.file.externalRootDirectory, filename, $scope.output, true)
         .then(function (success) {
             // success
@@ -64,7 +60,7 @@ angular.module('tracker.controller', ['ionic'])
     $scope.click = function() {
         clearTimeout($scope.loop);
         if ($scope.currentTreeElement.next.length === 0) {
-            $scope.addEntry($scope.currentTreeElement.name);
+            $scope.addEntry(($scope.action + ' | ' + $scope.currentTreeElement.name).substring(10));
             console.log('You chose');
             console.log($scope.action + ' | ' + $scope.currentTreeElement.name);
             $scope.sound('validation-double-beep');
