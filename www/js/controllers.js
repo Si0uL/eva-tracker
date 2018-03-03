@@ -100,7 +100,7 @@ angular.module('tracker.controller', ['ionic'])
         $cordovaFile.readAsText(cordova.file.externalRootDirectory, "tree.config")
         .then(function (_str) {
             // success
-            var _aux = parserService.readAndParse(_str);
+            var _aux = parserService.readAndParse(_str + '*'); // Add '*' to let parser add last entry
             console.log(_aux);
             $scope.actionTree = _aux[0];
             var to_load = _aux[1];
@@ -114,6 +114,7 @@ angular.module('tracker.controller', ['ionic'])
                 });
             };
             $scope.initTree();
+            console.log($scope.actionTree);
             // Keeping awake with insomnia
             window.plugins.insomnia.keepAwake(function(data){
                 console.log(data);
