@@ -81,14 +81,23 @@ angular.module('tracker.controller', ['ionic'])
     $scope.sound = function (songname) {
         console.log('*** ~~~~ Song Playing ~~~~ ***');
         console.log(songname);
-        $cordovaNativeAudio.play(songname);
-        /*
-        // to remove ?
-        // stop 'music' loop and unload
-        $timeout(function () {
-            $cordovaNativeAudio.unload(songname);
-        }, 1000 * 60);
-        */
+        $cordovaNativeAudio
+        .preloadSimple(songname, 'audio/' + songname + '.mp3')
+        .then(function (msg) {
+            $cordovaNativeAudio.play(songname,
+            function (msg) {
+                console.log(msg);
+                setTimeout(function() {
+                    $cordovaNativeAudio.unload(msg.id);
+                }, 2500);
+            }, function (err) {
+                console.log(err);
+            });
+
+        }, function (error) {
+            alert("Problem loading " + to_load[i] + " voice:\n" + error);
+        });
+
     };
 
 
@@ -103,16 +112,6 @@ angular.module('tracker.controller', ['ionic'])
             var _aux = parserService.readAndParse(_str + '*'); // Add '*' to let parser add last entry
             console.log(_aux);
             $scope.actionTree = _aux[0];
-            var to_load = _aux[1];
-            for (var i = 0; i < to_load.length; i++) {
-                $cordovaNativeAudio
-                .preloadSimple(to_load[i], 'audio/' + to_load[i] + '.mp3')
-                .then(function (msg) {
-                    console.log(msg);
-                }, function (error) {
-                    alert("Problem loading " + to_load[i] + " voice:\n" + error);
-                });
-            };
             $scope.initTree();
             console.log($scope.actionTree);
             // Keeping awake with insomnia
@@ -122,6 +121,20 @@ angular.module('tracker.controller', ['ionic'])
             function(err) {
                 console.log(err);
             });
+
+            /*
+            var _index = 0;
+            // play all songs to test them
+            setTimeout(function () {
+                for (var i = 0; i < to_load.length; i++) {
+                    setTimeout(function () {
+                        $scope.sound(to_load[_index]);
+                        _index ++;
+                    }, i*2000);
+                };
+            }, 2000);
+            */
+
         }, function (error) {
             // error
             console.log('Problem Loading Tree: \n', error);
