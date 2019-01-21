@@ -4,8 +4,7 @@ EVA Logging System
 # 1. Use
 * Install the app with the .apk file
 * Put a `tree.config` directly in your mobile intern storage to define your tree. An example is given in this git repository.
-* Use then defined audio samples, with the exact same name than the files contained in `audio/`.
-You can add new files, but you then will have to recompile the app (see dev use).
+* Create a `eva-audio/` directory directly into your mobile intern storage, then fill it with audio samples, with the exact same name than the one used in your tree. An example is given to you in this git in `eva-audio/`.
 * Create a `eva-logs/` directory directly in your mobile intern storage to receive the recorded logs.
 
 # 2. Dev Use
@@ -59,7 +58,7 @@ To be shared easily with non debug mode phones.
 
 Note that this gives you the output path of the unsigned built .apk application
 
-### Create yourselk an RSA key
+### Create yourself an RSA key
 
 It will then be used to sign it. (Ensures property if you once want to put it on the store). Replace all `<>` values in the command below, typically, `your_pc_path` something like `C:\Progam Files`:
 > <your_pc_path>\Java\jdk1.8.0_101\bin\keytool.exe -genkey -v -keystore <my_destination_dir>\my-release-key.keystore -alias <my_alias_name> -keyalg RSA -keysize 2048 -validity 10000
@@ -76,4 +75,4 @@ Same, on windows, `<your_other_pc_path>` should be something like `C:\Users\<you
 
 > <your_other_pc_path>\AppData\Local\Android\Sdk\build-tools\27.0.2\zipalign.exe -v 7 <my_app_path>\app-release-unsigned.apk app-output.apk
 
-`app-output.apk` can now be shared with any Android user, for him to follow the basic instructions given in first part (see 1. Use). Note that the audio files are fixed all included inside the app, only these could then be used in a tree.
+`app-output.apk` can now be shared with any Android user, for him to follow the basic instructions given in first part (see 1. Use).
