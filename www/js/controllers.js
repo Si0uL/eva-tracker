@@ -1,6 +1,6 @@
 angular.module('tracker.controller', ['ionic'])
 
-.controller('HomeCtrl', function($scope, parserService, $cordovaNativeAudio, $cordovaFile, $timeout) {
+.controller('HomeCtrl', function($scope, parserService, $cordovaMedia, $cordovaFile, $timeout) {
 
     // parameters
     $scope.actionDelay = 3000;
@@ -81,24 +81,7 @@ angular.module('tracker.controller', ['ionic'])
     $scope.sound = function (songname) {
         console.log('*** ~~~~ Song Playing ~~~~ ***');
         console.log(songname);
-        $cordovaNativeAudio
-        .preloadSimple(songname, 'audio/' + songname + '.mp3')
-        .then(function (msg) {
-            $cordovaNativeAudio.play(songname,
-            function (msg) {
-                console.log(msg);
-                setTimeout(function() {
-                    $cordovaNativeAudio.unload(msg.id);
-                }, 2500);
-            }, function (err) {
-                $cordovaNativeAudio.play(songname);
-                console.log(err);
-            });
-
-        }, function (error) {
-            console.log("Problem loading voice:\n" + error);
-        });
-
+        $cordovaMedia.newMedia("/eva-audio/" + songname + ".mp3").play();
     };
 
 
@@ -122,19 +105,6 @@ angular.module('tracker.controller', ['ionic'])
             function(err) {
                 console.log(err);
             });
-
-            /*
-            var _index = 0;
-            // play all songs to test them
-            setTimeout(function () {
-                for (var i = 0; i < to_load.length; i++) {
-                    setTimeout(function () {
-                        $scope.sound(to_load[_index]);
-                        _index ++;
-                    }, i*2000);
-                };
-            }, 2000);
-            */
 
         }, function (error) {
             // error
