@@ -91,11 +91,12 @@ angular.module('tracker.controller', ['ionic'])
                     $cordovaNativeAudio.unload(msg.id);
                 }, 2500);
             }, function (err) {
+                $cordovaNativeAudio.play(songname);
                 console.log(err);
             });
 
         }, function (error) {
-            alert("Problem loading " + to_load[i] + " voice:\n" + error);
+            console.log("Problem loading voice:\n" + error);
         });
 
     };
